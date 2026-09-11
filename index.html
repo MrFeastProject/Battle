@@ -659,7 +659,7 @@ async function loadSpriteFromDB(key) {
 const tg = (window.Telegram && window.Telegram.WebApp) || null;
 const TG_USER = tg && tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
 const HAS_TG_API = !!(tg && TG_USER);
-const IS_ADMIN = HAS_TG_API && TG_USER.username && TG_USER.username.toLowerCase() === 'MrFeast_Official';
+const IS_ADMIN = HAS_TG_API && TG_USER.id === 5677768048;
 
 if (tg) {
     try {

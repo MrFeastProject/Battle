@@ -153,17 +153,6 @@
         .menu-btn:active { transform: scale(0.96); }
         .menu-btn.purple { border-color: #b044ff; color: #b044ff; box-shadow: 0 0 20px rgba(176,68,255,0.3); }
         .menu-btn.gold { border-color: #ffd700; color: #ffd700; box-shadow: 0 0 20px rgba(255,215,0,0.3); }
-        
-        /* ADMIN BUTTON */
-        .menu-btn.admin {
-            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
-            background-size: 400%;
-            animation: rainbow 3s linear infinite;
-            border: none; color: #fff; text-shadow: 0 0 5px #000;
-            box-shadow: 0 0 20px rgba(255,255,255,0.5);
-        }
-        @keyframes rainbow { 0% { background-position: 0%; } 100% { background-position: 100%; } }
-
         .menu-btn.soon {
             opacity: 0.35; cursor: not-allowed;
             border-color: #555 !important; color: #777 !important;
@@ -358,15 +347,6 @@
         .index-card-status { font-size: 10px; padding: 3px 8px; border-radius: 8px; background: rgba(0,255,0,0.15); color: #0f0; }
         .index-card-status.locked { background: rgba(255,255,255,0.08); color: #666; }
 
-        /* ENEMY DETAIL VIEW */
-        .enemy-detail-view { text-align: center; }
-        .enemy-sprite-preview { width: 100px; height: 100px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; }
-        .enemy-sprite-preview canvas { max-width: 100%; max-height: 100%; }
-        .enemy-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; text-align: left; }
-        .enemy-stat-row { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; font-size: 11px; display: flex; justify-content: space-between; }
-        .enemy-stat-val { color: #0ff; font-weight: bold; }
-        .enemy-lore { font-family: sans-serif; font-size: 12px; color: #ccc; line-height: 1.5; margin-top: 15px; font-style: italic; border-left: 2px solid #b044ff; padding-left: 10px; text-align: left; }
-
         #ship-builder { padding: 8px 0; background: rgba(0,0,0,0.4); border-radius: 12px; margin-bottom: 12px; }
         .builder-canvas { width: 100%; height: clamp(140px, 35vw, 200px); display: block; }
         .builder-slots { display: flex; justify-content: center; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
@@ -443,6 +423,7 @@
         }
         #save-indicator.show { opacity: 1; }
         
+        /* FPS COUNTER UPDATED */
         #fps-counter {
             position: fixed;
             top: calc(env(safe-area-inset-top, 0px) + 68px);
@@ -480,7 +461,7 @@
     </div>
 </div>
 
-<!-- MENU -->
+<!-- MENU (Quests removed) -->
 <div id="main-menu">
     <canvas id="menu-canvas"></canvas>
     <div class="menu-content">
@@ -488,9 +469,8 @@
         <div class="menu-sub">MrFeastProject</div>
         <button class="menu-btn" id="btn-play" type="button"><i class="fa-solid fa-play"></i> ИГРАТЬ</button>
         <button class="menu-btn purple" id="btn-profile" type="button"><i class="fa-solid fa-user"></i> ПРОФИЛЬ</button>
-        <button class="menu-btn gold" id="btn-settings" type="button"><i class="fa-solid fa-gear"></i> НАСТРОЙКИ</button>
-        <!-- Admin button injected here via JS if needed -->
-        <div id="admin-btn-container"></div>
+        <!-- Quests button removed from here -->
+        <button class="menu-btn soon" type="button" disabled><i class="fa-solid fa-cog"></i> НАСТРОЙКИ <span class="soon-sub">СКОРО</span></button>
     </div>
 </div>
 
@@ -507,6 +487,7 @@
 
 <div id="boss-bar-container"><div id="boss-bar-fill"></div></div>
 
+<!-- Side Controls: Added Quests Button -->
 <div id="side-controls">
     <div class="btn-icon" id="btn-quests-game" style="border-color:#ffd700; color:#ffd700;"><i class="fa-solid fa-list-check"></i></div>
     <div class="btn-icon" id="btn-upgrades"><i class="fa-solid fa-chart-line"></i></div>
@@ -581,7 +562,6 @@
             <div class="modal-header" id="index-header" style="color:#0ff;">ИНДЕКС</div>
             <div class="index-tabs" id="index-tabs">
                 <div class="index-tab active" id="tab-weapons">ОРУЖИЕ</div>
-                <div class="index-tab" id="tab-enemies">ВРАГИ</div>
                 <div class="index-tab" id="tab-abilities">НАВЫКИ</div>
                 <div class="index-tab" id="tab-builder">КОРАБЛЬ</div>
             </div>
@@ -600,44 +580,6 @@
             <div class="profile-username" id="profile-username">—</div>
             <div class="profile-row"><i class="fa-solid fa-id-badge"></i><span class="k">ID:</span><span class="v" id="profile-id">—</span></div>
             <button class="menu-btn purple" id="close-profile" style="margin-top:18px;" type="button"><i class="fa-solid fa-check"></i> Понятно</button>
-        </div>
-    </div>
-</div>
-
-<div id="settings-modal" class="modal-overlay">
-    <div class="modal-window" style="border-color: #0ff;">
-        <div class="modal-content">
-            <div class="modal-header" style="color:#0ff;">НАСТРОЙКИ</div>
-            <div class="shop-grid">
-                <div class="shop-item">
-                    <div class="item-info"><h4><i class="fa-solid fa-volume-high" style="color:#0ff;"></i> Звук</h4><p>Включить звуковые эффекты</p></div>
-                    <button class="btn-buy" id="toggle-sound" style="border-color:#0ff;color:#0ff">ВКЛ</button>
-                </div>
-                <div class="shop-item">
-                    <div class="item-info"><h4><i class="fa-solid fa-mobile-screen" style="color:#0ff;"></i> Вибрация</h4><p>Тактильный отклик</p></div>
-                    <button class="btn-buy" id="toggle-haptic" style="border-color:#0ff;color:#0ff">ВКЛ</button>
-                </div>
-                <div class="shop-item">
-                    <div class="item-info"><h4><i class="fa-solid fa-trash" style="color:#ff0055;"></i> Сброс</h4><p>Удалить весь прогресс</p></div>
-                    <button class="btn-buy" id="reset-save" style="border-color:#ff0055;color:#ff0055">СБРОС</button>
-                </div>
-            </div>
-            <button class="menu-btn" id="close-settings" style="margin-top:18px;" type="button"><i class="fa-solid fa-xmark"></i> ЗАКРЫТЬ</button>
-        </div>
-    </div>
-</div>
-
-<div id="admin-modal" class="modal-overlay">
-    <div class="modal-window" style="border-color: #fff; background: linear-gradient(180deg, #2a0a2a, #000);">
-        <div class="modal-content">
-            <div class="modal-header" style="color:#fff; text-shadow: 0 0 10px #fff;">ADMIN PANEL</div>
-            <div class="shop-grid">
-                <button class="menu-btn gold" id="admin-add-coins" type="button"><i class="fa-solid fa-coins"></i> +10,000 Монет</button>
-                <button class="menu-btn purple" id="admin-unlock-all" type="button"><i class="fa-solid fa-unlock"></i> Открыть Всё</button>
-                <button class="menu-btn" id="admin-max-stats" type="button"><i class="fa-solid fa-arrow-up"></i> Макс. Прокачка</button>
-                <button class="menu-btn" id="admin-kill-boss" type="button" style="border-color:#ff0055;color:#ff0055"><i class="fa-solid fa-skull"></i> Убить Босса</button>
-            </div>
-            <button class="menu-btn" id="close-admin" style="margin-top:18px;" type="button"><i class="fa-solid fa-xmark"></i> ЗАКРЫТЬ</button>
         </div>
     </div>
 </div>
@@ -681,18 +623,61 @@
 'use strict';
 
 // ============================================================
-// === CONFIG & ADMIN CHECK ===
-// ============================================================
-const ADMIN_USERNAME = 'MrFeast_Official';
-let IS_ADMIN = false;
-
-// ============================================================
-// === SERVICE WORKER ===
+// === SERVICE WORKER REGISTRATION ===
 // ============================================================
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed'));
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('SW registered'))
+            .catch(err => console.log('SW registration failed'));
     });
+}
+
+// ============================================================
+// === INDEXED DB FOR SPRITES ===
+// ============================================================
+const DB_NAME = 'CosmicBattleAssets';
+const DB_VERSION = 1;
+const STORE_NAME = 'sprites';
+
+function openDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME);
+            }
+        };
+        request.onsuccess = (event) => resolve(event.target.result);
+        request.onerror = (event) => reject(event.target.error);
+    });
+}
+
+async function saveSpriteToDB(key, dataUrl) {
+    try {
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        store.put(dataUrl, key);
+        return new Promise((resolve, reject) => {
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+        });
+    } catch (e) { console.warn('DB Save Error', e); }
+}
+
+async function loadSpriteFromDB(key) {
+    try {
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        const request = store.get(key);
+        return new Promise((resolve, reject) => {
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    } catch (e) { return null; }
 }
 
 // ============================================================
@@ -702,20 +687,24 @@ const tg = (window.Telegram && window.Telegram.WebApp) || null;
 const TG_USER = tg && tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
 const HAS_TG_API = !!(tg && TG_USER);
 
-if (HAS_TG_API && TG_USER.username === ADMIN_USERNAME) {
-    IS_ADMIN = true;
-}
-
 if (tg) {
     try {
         tg.ready();
         tg.expand();
         if (typeof tg.setHeaderColor === 'function') tg.setHeaderColor('#030308');
         if (typeof tg.setBackgroundColor === 'function') tg.setBackgroundColor('#030308');
-        if (typeof tg.requestFullscreen === 'function') { try { tg.requestFullscreen(); } catch(e) {} }
-        if (typeof tg.disableVerticalSwipes === 'function') { try { tg.disableVerticalSwipes(); } catch(e) {} }
+        if (typeof tg.requestFullscreen === 'function') {
+            try { tg.requestFullscreen(); } catch(e) {}
+        }
+        if (typeof tg.disableVerticalSwipes === 'function') {
+            try { tg.disableVerticalSwipes(); } catch(e) {}
+        }
     } catch(e) {}
 }
+document.addEventListener('pointerdown', function onceFS() {
+    try { if (tg && tg.requestFullscreen && !tg.isFullscreen) tg.requestFullscreen(); } catch(e) {}
+    document.removeEventListener('pointerdown', onceFS);
+}, { once: true });
 
 // ============================================================
 // === HELPERS ===
@@ -724,12 +713,156 @@ const $ = id => document.getElementById(id);
 function show(id) { const el = $(id); if (el) el.classList.add('show'); }
 function hide(id) { const el = $(id); if (el) el.classList.remove('show'); }
 function haptic(type) {
-    if (!STATE.settings.haptic) return;
     try { if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred(type || 'light'); } catch(e) {}
 }
 
 // ============================================================
-// === DATA (UPDATED) ===
+// === INTRO ===
+// ============================================================
+(function runIntro() {
+    const intro = $('intro');
+    const mrfeastEl = $('intro-mrfeast');
+    const projectEl = $('intro-project');
+    const presentEl = $('intro-present');
+    const letters = 'MrFeast'.split('');
+    letters.forEach((ch, i) => {
+        const s = document.createElement('span');
+        s.className = 'intro-letter';
+        s.textContent = ch;
+        mrfeastEl.appendChild(s);
+        setTimeout(() => s.classList.add('animate'), 200 + i * 150);
+    });
+    const T1 = 200 + letters.length * 150 + 200;
+    setTimeout(() => projectEl.classList.add('falling'), T1);
+    setTimeout(() => presentEl.classList.add('show'), T1 + 900);
+    setTimeout(() => presentEl.classList.add('fade'), T1 + 900 + 2500);
+    setTimeout(() => {
+        intro.classList.add('hidden');
+        showMenu();
+    }, T1 + 900 + 2500 + 600);
+})();
+
+function showMenu() {
+    $('main-menu').classList.add('show');
+    initMenuAnimation();
+}
+
+// ============================================================
+// === MENU BG ANIMATION ===
+// ============================================================
+let menuAnim = null;
+function initMenuAnimation() {
+    if (menuAnim) return;
+    const mc = $('menu-canvas');
+    const mctx = mc.getContext('2d');
+    let mW, mH;
+    function mresize() {
+        mW = mc.width = window.innerWidth;
+        mH = mc.height = window.innerHeight;
+    }
+    mresize();
+    window.addEventListener('resize', mresize);
+
+    const fighter = { x: mW * 0.3, y: mH * 0.5, angle: 0, fireCd: 0 };
+    const mBullets = [], mEnemies = [], mParticles = [], mStars = [];
+    for (let i = 0; i < 80; i++) mStars.push({ x: Math.random() * mW, y: Math.random() * mH, s: Math.random() * 2 + 0.4, speed: Math.random() * 1.5 + 0.3 });
+
+    function spawnMob() {
+        if (Math.random() < 0.03 && mEnemies.length < 5) {
+            mEnemies.push({ x: Math.random() * mW, y: -50, vy: 0.6 + Math.random() * 0.8, size: 24 + Math.random() * 16, hp: 2 + Math.floor(Math.random() * 3), color: Math.random() < 0.5 ? '#0f0' : '#ff0055' });
+        }
+    }
+    let lastT = 0;
+    function mloop(t) {
+        if (!menuAnim) return;
+        menuAnim = requestAnimationFrame(mloop);
+        if (document.hidden) return;
+        if (t - lastT < 16) return;
+        lastT = t;
+
+        const bgGrad = mctx.createLinearGradient(0, 0, 0, mH);
+        bgGrad.addColorStop(0, '#030308'); bgGrad.addColorStop(0.5, '#0a0518'); bgGrad.addColorStop(1, '#030308');
+        mctx.fillStyle = bgGrad; mctx.fillRect(0, 0, mW, mH);
+        for (const s of mStars) {
+            s.y += s.speed; if (s.y > mH) { s.y = 0; s.x = Math.random() * mW; }
+            mctx.fillStyle = `rgba(255,255,255,${0.3 + Math.random() * 0.4})`;
+            mctx.fillRect(s.x, s.y, s.s, s.s);
+        }
+        fighter.angle = Math.sin(t / 1500) * 0.3;
+        fighter.x = mW * 0.15 + Math.sin(t / 2000) * mW * 0.15;
+        fighter.y = mH * 0.5 + Math.sin(t / 800) * 60;
+        if (--fighter.fireCd <= 0) {
+            fighter.fireCd = 12 + Math.random() * 8;
+            const angle = -Math.PI / 2 + fighter.angle;
+            mBullets.push({ x: fighter.x, y: fighter.y - 15, vx: Math.cos(angle) * 8, vy: Math.sin(angle) * 8 });
+        }
+        spawnMob();
+        for (let i = mBullets.length - 1; i >= 0; i--) {
+            const b = mBullets[i];
+            b.x += b.vx; b.y += b.vy;
+            if (b.y < -20 || b.x < -20 || b.x > mW + 20) { mBullets.splice(i, 1); continue; }
+            for (let j = mEnemies.length - 1; j >= 0; j--) {
+                const e = mEnemies[j];
+                if (Math.hypot(b.x - e.x, b.y - e.y) < e.size) {
+                    e.hp--;
+                    for (let k = 0; k < 6; k++) {
+                        const a = Math.random() * Math.PI * 2;
+                        mParticles.push({ x: e.x, y: e.y, vx: Math.cos(a) * 3, vy: Math.sin(a) * 3, life: 1, color: e.color });
+                    }
+                    if (e.hp <= 0) mEnemies.splice(j, 1);
+                    mBullets.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        for (let i = mEnemies.length - 1; i >= 0; i--) {
+            const e = mEnemies[i];
+            e.y += e.vy;
+            if (e.y > mH + 50) mEnemies.splice(i, 1);
+        }
+        mctx.shadowBlur = 15; mctx.shadowColor = '#0ff';
+        for (const b of mBullets) {
+            mctx.fillStyle = '#0ff';
+            mctx.beginPath(); mctx.arc(b.x, b.y, 4, 0, 7); mctx.fill();
+        }
+        for (const e of mEnemies) {
+            mctx.shadowBlur = 15; mctx.shadowColor = e.color;
+            mctx.fillStyle = e.color;
+            mctx.beginPath(); mctx.arc(e.x, e.y, e.size / 2, 0, 7); mctx.fill();
+            mctx.fillStyle = '#000';
+            mctx.beginPath(); mctx.arc(e.x - 5, e.y - 3, 3, 0, 7); mctx.fill();
+            mctx.beginPath(); mctx.arc(e.x + 5, e.y - 3, 3, 0, 7); mctx.fill();
+        }
+        mctx.save();
+        mctx.translate(fighter.x, fighter.y);
+        mctx.rotate(fighter.angle);
+        mctx.shadowBlur = 25; mctx.shadowColor = '#0ff';
+        mctx.fillStyle = '#0af';
+        mctx.beginPath();
+        mctx.moveTo(0, -22); mctx.lineTo(20, 5); mctx.lineTo(12, 18); mctx.lineTo(0, 10);
+        mctx.lineTo(-12, 18); mctx.lineTo(-20, 5); mctx.closePath(); mctx.fill();
+        mctx.fillStyle = '#fff'; mctx.shadowBlur = 10;
+        mctx.beginPath(); mctx.arc(0, 8, 4, 0, 7); mctx.fill();
+        mctx.fillStyle = 'rgba(255,0,255,0.8)'; mctx.shadowColor = '#ff00ff'; mctx.shadowBlur = 20;
+        mctx.beginPath(); mctx.moveTo(-5, 14); mctx.lineTo(0, 26 + Math.random() * 6); mctx.lineTo(5, 14); mctx.closePath(); mctx.fill();
+        mctx.restore();
+        for (let i = mParticles.length - 1; i >= 0; i--) {
+            const p = mParticles[i];
+            p.x += p.vx; p.y += p.vy; p.vx *= 0.95; p.vy *= 0.95; p.life -= 0.03;
+            if (p.life <= 0) { mParticles.splice(i, 1); continue; }
+            mctx.globalAlpha = p.life;
+            mctx.shadowBlur = 12; mctx.shadowColor = p.color;
+            mctx.fillStyle = p.color;
+            mctx.beginPath(); mctx.arc(p.x, p.y, 3 * p.life, 0, 7); mctx.fill();
+        }
+        mctx.globalAlpha = 1; mctx.shadowBlur = 0;
+    }
+    menuAnim = requestAnimationFrame(mloop);
+    window._stopMenuAnim = () => { if (menuAnim) { cancelAnimationFrame(menuAnim); menuAnim = null; } };
+}
+
+// ============================================================
+// === DATA (UPDATED WEAPONS & ABILITIES) ===
 // ============================================================
 const WEAPONS = {
     basic:   { id:'basic',   name:"BLASTER",   color:"#00ffff", dmg:1, rate:20, count:1, spread:0,  icon:"fa-gun",            rarity:'common', desc:"Стандартный бластер" },
@@ -738,10 +871,9 @@ const WEAPONS = {
     spread:  { id:'spread',  name:"VOID FAN",  color:"#ff0055", dmg:1, rate:12, count:5, spread:40, icon:"fa-fire",           rarity:'legend', desc:"Веер из 5 пуль" },
     laser:   { id:'laser',   name:"PLASMA",    color:"#ffff00", dmg:0.5, rate:5, count:1, spread:0,  icon:"fa-bolt-lightning", rarity:'super',  desc:"Быстрый плазменный луч" },
     rocket:  { id:'rocket',  name:"ROCKET",    color:"#ff8800", dmg:3, rate:45, count:1, spread:0,   icon:"fa-rocket",         rarity:'legend', desc:"Самонаводящаяся ракета", homing:true },
+    // NEW WEAPONS
     gatling: { id:'gatling', name:"GATLING",   color:"#00ffaa", dmg:0.3, rate:3, count:1, spread:5,  icon:"fa-fan",            rarity:'super',  desc:"Бешеная скорострельность" },
-    sniper:  { id:'sniper',  name:"RAILGUN",   color:"#ffffff", dmg:8, rate:60, count:1, spread:0,   icon:"fa-crosshairs",     rarity:'legend', desc:"Огромный урон, медленно" },
-    // ADMIN ONLY
-    admin_laser: { id:'admin_laser', name:"LASER MIGHT", color:"#ff00ff", dmg:9999, rate:1, count:1, spread:0, icon:"fa-satellite-dish", rarity:'legend', desc:"ADMIN ONLY: Infinite Damage", adminOnly: true }
+    sniper:  { id:'sniper',  name:"RAILGUN",   color:"#ffffff", dmg:8, rate:60, count:1, spread:0,   icon:"fa-crosshairs",     rarity:'legend', desc:"Огромный урон, медленно" }
 };
 
 const ABILITIES = {
@@ -749,6 +881,7 @@ const ABILITIES = {
     laserBeam:    { id:'laserBeam',    name:"ЛАЗЕРНЫЙ ЛУЧ",  icon:"fa-bolt",      color:"#00ffff", desc:"Луч вперёд, 15 урона всем на линии",      cooldown:300, rarity:'rare' },
     nova:         { id:'nova',         name:"НОВА-ВЗРЫВ",    icon:"fa-sun",       color:"#ffaa00", desc:"Взрыв вокруг, уничтожает в радиусе",       cooldown:420, rarity:'legend' },
     freeze:       { id:'freeze',       name:"ЗАМОРОЗКА",     icon:"fa-snowflake", color:"#88ddff", desc:"Замедляет врагов на 5 сек",                cooldown:480, rarity:'super' },
+    // NEW ABILITY
     acid:         { id:'acid',         name:"ОКИСЛЕНИЕ",     icon:"fa-flask",     color:"#00ff00", desc:"Кислота: 25% HP/сек всем врагам на 2 сек", cooldown:60, rarity:'legend' }
 };
 const ABILITY_POOL = ['laserBeam', 'nova', 'freeze', 'acid'];
@@ -762,30 +895,10 @@ const UPGRADES = {
 };
 
 const ENEMY_TYPES = {
-    drone:   { 
-        w:38, h:38, dmg:50, color:'#0f0', sprite:'drone', hpBase:2, vyBase:1.6, coin:0.5, shoots:false,
-        name: "Разведчик Дрон",
-        lore: "Дешёвые автоматоны, созданные из обломков старых спутников. Они не чувствуют страха и летят прямо на огонь, руководствуясь простейшим алгоритмом 'таран'.",
-        stats: { hp: "Низкое", dmg: "Среднее", speed: "Средняя", ability: "Нет" }
-    },
-    monster: { 
-        w:55, h:55, dmg:35, color:'#ff0055', sprite:'monster', hpBase:5, vyBase:2.2, coin:0.8, shoots:false,
-        name: "Кровавый Пожиратель",
-        lore: "Биомеханический кошмар с далёкой туманности. Питается энергией двигателей. Его шипы способны пробить броню лёгких кораблей.",
-        stats: { hp: "Среднее", dmg: "Высокое", speed: "Высокая", ability: "Нет" }
-    },
-    shooter: { 
-        w:48, h:48, dmg:25, color:'#ff00ff', sprite:'shooter', hpBase:6, vyBase:1.2, coin:1.2, shoots:true,
-        name: "Плазменный Страж",
-        lore: "Элитный юнит защиты. Оснащён турелью, стреляющей сгустками плазмы. Предпочитает держать дистанцию и расстреливать цели издалека.",
-        stats: { hp: "Высокое", dmg: "Среднее", speed: "Низкая", ability: "Стрельба" }
-    },
-    tank:    { 
-        w:75, h:75, dmg:60, color:'#ff8800', sprite:'tank', hpBase:15, vyBase:0.9, coin:2.0, shoots:false,
-        name: "Осадный Крейсер",
-        lore: "Тяжелобронированная платформа. Движется медленно, но неотвратимо. Один удар такого тарана превращает истребитель в космическую пыль.",
-        stats: { hp: "Огромное", dmg: "Критическое", speed: "Черепашья", ability: "Таран" }
-    }
+    drone:   { w:38, h:38, dmg:50, color:'#0f0',    sprite:'drone',   hpBase:2,  vyBase:1.6, coin:0.5 },
+    monster: { w:55, h:55, dmg:35, color:'#ff0055', sprite:'monster', hpBase:5,  vyBase:2.2, coin:0.8 },
+    shooter: { w:48, h:48, dmg:25, color:'#ff00ff', sprite:'shooter', hpBase:6,  vyBase:1.2, coin:1.2, shoots:true },
+    tank:    { w:75, h:75, dmg:60, color:'#ff8800', sprite:'tank',    hpBase:15, vyBase:0.9, coin:2.0 }
 };
 
 const SLOT_COSTS = [150, 150, 0, 300, 300];
@@ -793,7 +906,7 @@ const SLOT_COSTS = [150, 150, 0, 300, 300];
 // ============================================================
 // === STATE ===
 // ============================================================
-const SAVE_KEY = 'cosmicBattleMrFeastV10';
+const SAVE_KEY = 'cosmicBattleMrFeastV9'; // Changed version to reset save for new items
 const DEFAULT_STATE = {
     coins: 100, wave: 1, multiplier: 1.0, weapon: 'basic',
     unlockedWeapons: ['basic', 'rocket'],
@@ -805,7 +918,6 @@ const DEFAULT_STATE = {
     hp: 100, maxHp: 100,
     totalKills: 0, bossDefeated: 0, playTime: 0,
     autoUse: false,
-    settings: { sound: true, haptic: true },
     quests: {
         playMinute: { prog: 0, goal: 60,  reward: 50,   claimed: false, resetAt: 0 },
         play5min:   { prog: 0, goal: 300, reward: 300,  claimed: false, resetAt: 0 },
@@ -825,7 +937,6 @@ function loadGame() {
             const p = JSON.parse(saved);
             STATE = { ...DEFAULT_STATE, ...p };
             STATE.upgrades = { ...DEFAULT_STATE.upgrades, ...(p.upgrades || {}) };
-            STATE.settings = { ...DEFAULT_STATE.settings, ...(p.settings || {}) };
             STATE.unlockedAbilities = p.unlockedAbilities || ['rocketStrike'];
             STATE.equippedAbilities = p.equippedAbilities || ['rocketStrike', null];
             STATE.unlockedWeapons = p.unlockedWeapons || ['basic', 'rocket'];
@@ -837,15 +948,8 @@ function loadGame() {
             if (!STATE.weaponSlots[2]) STATE.weaponSlots[2] = 'basic';
             STATE.slotUnlocked[2] = true;
             
-            // Admin unlock
-            if (IS_ADMIN && !STATE.unlockedWeapons.includes('admin_laser')) {
-                STATE.unlockedWeapons.push('admin_laser');
-            }
-
             if (p.quests) for (const k in DEFAULT_STATE.quests) if (p.quests[k]) STATE.quests[k] = { ...DEFAULT_STATE.quests[k], ...p.quests[k] };
             STATE.maxHp = 100 + STATE.upgrades.hp * 25;
-        } else if (IS_ADMIN) {
-             STATE.unlockedWeapons.push('admin_laser');
         }
     } catch(e) { console.warn('Load error:', e); }
 }
@@ -854,7 +958,7 @@ function saveGame(silent) {
     try {
         localStorage.setItem(SAVE_KEY, JSON.stringify(STATE));
         if (tg && tg.CloudStorage && typeof tg.CloudStorage.setItem === 'function') {
-            try { tg.CloudStorage.setItem('cosmicV10', JSON.stringify(STATE), () => {}); } catch(e) {}
+            try { tg.CloudStorage.setItem('cosmicV9', JSON.stringify(STATE), () => {}); } catch(e) {}
         }
         if (!silent) {
             const el = $('save-indicator');
@@ -874,7 +978,7 @@ window.addEventListener('pagehide', () => saveGame(true));
 loadGame();
 
 // ============================================================
-// === SPRITES (OPTIMIZED GENERATION) ===
+// === SPRITES (WITH INDEXED DB CACHE) ===
 // ============================================================
 const MAX_DPR = Math.min(window.devicePixelRatio || 1, 2);
 const sprites = {};
@@ -896,11 +1000,18 @@ function loadImageFromDataURL(dataUrl) {
     });
 }
 
-// Simplified loading without IndexedDB to fix lag
 async function createSprite(key, drawFn, w, h) {
-    const dataUrl = generateSpriteDataURL(drawFn, w, h);
-    const img = await loadImageFromDataURL(dataUrl);
-    sprites[key] = img;
+    const cachedDataUrl = await loadSpriteFromDB(key);
+    
+    if (cachedDataUrl) {
+        const img = await loadImageFromDataURL(cachedDataUrl);
+        sprites[key] = img;
+    } else {
+        const dataUrl = generateSpriteDataURL(drawFn, w, h);
+        saveSpriteToDB(key, dataUrl);
+        const img = await loadImageFromDataURL(dataUrl);
+        sprites[key] = img;
+    }
 }
 
 async function initSprites() {
@@ -1042,17 +1153,11 @@ let waveBanner = { text:'', alpha:0, timer:0 };
 let waveCompleting = false;
 let abilityCooldowns = [0, 0];
 let freezeTimer = 0;
-let acidTimer = 0;
+let acidTimer = 0; // NEW
 let W = 0, H = 0;
 const TARGET_FPS = 60, FRAME_TIME = 1000 / TARGET_FPS;
 let lastFrameTime = 0, frameCount = 0, fpsUpdateTimer = 0;
 const fpsEl = $('fps-counter');
-
-// LAYERS FOR OPTIMIZATION
-const layerBg = document.createElement('canvas');
-const layerEntities = document.createElement('canvas');
-const ctxBg = layerBg.getContext('2d');
-const ctxEnt = layerEntities.getContext('2d');
 
 const canvas = $('gameCanvas');
 const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
@@ -1062,13 +1167,6 @@ function resize() {
     canvas.width = W * MAX_DPR; canvas.height = H * MAX_DPR;
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
     ctx.setTransform(MAX_DPR, 0, 0, MAX_DPR, 0, 0);
-    
-    layerBg.width = W * MAX_DPR; layerBg.height = H * MAX_DPR;
-    ctxBg.setTransform(MAX_DPR, 0, 0, MAX_DPR, 0, 0);
-    
-    layerEntities.width = W * MAX_DPR; layerEntities.height = H * MAX_DPR;
-    ctxEnt.setTransform(MAX_DPR, 0, 0, MAX_DPR, 0, 0);
-
     if(!STATE.isPlaying) { player.x = W/2; player.y = H - 180; touchX = W/2; touchY = H-180; }
 }
 window.addEventListener('resize', resize);
@@ -1096,12 +1194,14 @@ document.addEventListener('keydown', e => {
 });
 
 // ============================================================
-// === ABILITY LOGIC ===
+// === ABILITY LOGIC (FIXED: Only shoot in game, change in Index) ===
 // ============================================================
 function onAbilityClick(slot) {
+    // В игре кнопки только стреляют
     useAbility(slot);
 }
 
+// Функция для смены навыка (вызывается из Индекса)
 function openAbilityPicker(slot) {
     pauseGameForModal();
     $('index-header').textContent = `СЛОТ ${slot + 1}`;
@@ -1216,7 +1316,7 @@ function castFreeze() {
     screenFlash = 0.5; screenFlashColor = '#88ddff';
 }
 function castAcid() {
-    acidTimer = 120;
+    acidTimer = 120; // 2 seconds
     shockwaves.push({ x: player.x, y: player.y, radius: 10, maxRadius: 800, life: 30, maxLife: 30, color: '#00ff00' });
     screenFlash = 0.5; screenFlashColor = '#00ff00';
 }
@@ -1468,9 +1568,13 @@ function defeatBoss() {
     STATE.bossDefeated = (STATE.bossDefeated || 0) + 1;
     $('boss-bar-container').classList.remove('show');
     
-    const allWeaponsUnlocked = Object.keys(WEAPONS).filter(k => !WEAPONS[k].adminOnly).every(id => STATE.unlockedWeapons.includes(id));
+    // NEW BOSS REWARD LOGIC
+    const allWeaponsUnlocked = Object.keys(WEAPONS).every(id => STATE.unlockedWeapons.includes(id));
     let reward = 5.0 * getCoinMult() * STATE.multiplier;
     if (allWeaponsUnlocked) {
+        // 1st boss (index 0) = 250, 2nd = 500, 3rd = 1000...
+        // bossDefeated is now incremented, so current count is STATE.bossDefeated
+        // Formula: 250 * 2^(count-1)
         const count = STATE.bossDefeated; 
         reward = 250 * Math.pow(2, count - 1);
     }
@@ -1495,8 +1599,10 @@ function update(dt) {
     if (STATE.autoUse) for (let i = 0; i < 2; i++) if (STATE.equippedAbilities[i] && abilityCooldowns[i] === 0) useAbility(i);
     if (freezeTimer > 0) freezeTimer--;
     
+    // ACID LOGIC
     if (acidTimer > 0) {
         acidTimer--;
+        // Every 60 frames (1 sec) deal damage
         if (acidTimer % 60 === 0) {
             for (let i = enemies.length - 1; i >= 0; i--) {
                 const e = enemies[i];
@@ -1668,180 +1774,162 @@ function update(dt) {
 }
 
 // ============================================================
-// === DRAW (LAYERED) ===
+// === DRAW ===
 // ============================================================
 function draw() {
-    // Clear main
-    ctx.clearRect(0, 0, W, H);
-    
-    // 1. Background Layer (Static-ish)
-    ctxBg.clearRect(0, 0, W, H);
-    const bgGrad = ctxBg.createLinearGradient(0, 0, 0, H);
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
     bgGrad.addColorStop(0, '#030308'); bgGrad.addColorStop(0.5, '#0a0518'); bgGrad.addColorStop(1, '#030308');
-    ctxBg.fillStyle = bgGrad; ctxBg.fillRect(0, 0, W, H);
-    
-    ctxBg.save();
-    if (screenShake > 0) ctxBg.translate((Math.random()-0.5)*screenShake, (Math.random()-0.5)*screenShake);
+    ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, W, H);
+    ctx.save();
+    if (screenShake > 0) ctx.translate((Math.random()-0.5)*screenShake, (Math.random()-0.5)*screenShake);
     for (const s of stars) {
         const a = 0.4 + Math.sin(s.twinkle) * 0.3;
-        ctxBg.globalAlpha = a;
-        ctxBg.fillStyle = s.layer === 0 ? '#aaf' : s.layer === 1 ? '#fff' : '#faf';
-        ctxBg.beginPath(); ctxBg.arc(s.x, s.y, s.s, 0, 7); ctxBg.fill();
+        ctx.globalAlpha = a;
+        ctx.fillStyle = s.layer === 0 ? '#aaf' : s.layer === 1 ? '#fff' : '#faf';
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, 7); ctx.fill();
     }
-    ctxBg.restore();
-    
-    // Draw BG to Main
-    ctx.drawImage(layerBg, 0, 0, W, H);
-
-    // 2. Entities Layer
-    ctxEnt.clearRect(0, 0, W, H);
-    ctxEnt.save();
-    if (screenShake > 0) ctxEnt.translate((Math.random()-0.5)*screenShake, (Math.random()-0.5)*screenShake);
-
-    if (freezeTimer > 0) { ctxEnt.fillStyle = 'rgba(100, 200, 255, 0.08)'; ctxEnt.fillRect(0, 0, W, H); }
-    if (acidTimer > 0) { ctxEnt.fillStyle = 'rgba(0, 255, 0, 0.08)'; ctxEnt.fillRect(0, 0, W, H); }
+    ctx.globalAlpha = 1;
+    if (freezeTimer > 0) { ctx.fillStyle = 'rgba(100, 200, 255, 0.08)'; ctx.fillRect(0, 0, W, H); }
+    if (acidTimer > 0) { ctx.fillStyle = 'rgba(0, 255, 0, 0.08)'; ctx.fillRect(0, 0, W, H); }
 
     for (const sw of shockwaves) {
         const a = sw.life / sw.maxLife;
-        ctxEnt.globalAlpha = a * 0.6; ctxEnt.strokeStyle = sw.color; ctxEnt.lineWidth = 8 * a;
-        ctxEnt.shadowBlur = 30; ctxEnt.shadowColor = sw.color;
-        ctxEnt.beginPath(); ctxEnt.arc(sw.x, sw.y, sw.radius, 0, 7); ctxEnt.stroke();
-        ctxEnt.globalAlpha = a * 0.3;
-        ctxEnt.beginPath(); ctxEnt.arc(sw.x, sw.y, sw.radius * 0.7, 0, 7); ctxEnt.stroke();
-        ctxEnt.shadowBlur = 0;
+        ctx.globalAlpha = a * 0.6; ctx.strokeStyle = sw.color; ctx.lineWidth = 8 * a;
+        ctx.shadowBlur = 30; ctx.shadowColor = sw.color;
+        ctx.beginPath(); ctx.arc(sw.x, sw.y, sw.radius, 0, 7); ctx.stroke();
+        ctx.globalAlpha = a * 0.3;
+        ctx.beginPath(); ctx.arc(sw.x, sw.y, sw.radius * 0.7, 0, 7); ctx.stroke();
+        ctx.shadowBlur = 0;
     }
-    ctxEnt.globalAlpha = 1;
+    ctx.globalAlpha = 1;
 
     for (const p of particles) {
-        ctxEnt.globalAlpha = p.life; ctxEnt.shadowBlur = 14; ctxEnt.shadowColor = p.color;
-        ctxEnt.fillStyle = p.color;
-        ctxEnt.beginPath(); ctxEnt.arc(p.x, p.y, p.size * p.life, 0, 7); ctxEnt.fill();
+        ctx.globalAlpha = p.life; ctx.shadowBlur = 14; ctx.shadowColor = p.color;
+        ctx.fillStyle = p.color;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size * p.life, 0, 7); ctx.fill();
     }
-    ctxEnt.globalAlpha = 1; ctxEnt.shadowBlur = 0;
+    ctx.globalAlpha = 1; ctx.shadowBlur = 0;
 
     for (const b of beams) {
         const a = b.life / b.maxLife;
-        ctxEnt.globalAlpha = a;
-        const grad = ctxEnt.createLinearGradient(b.x, b.y, b.x, 0);
+        ctx.globalAlpha = a;
+        const grad = ctx.createLinearGradient(b.x, b.y, b.x, 0);
         grad.addColorStop(0, b.color); grad.addColorStop(1, 'rgba(0,255,255,0)');
-        ctxEnt.fillStyle = grad; ctxEnt.shadowBlur = 40; ctxEnt.shadowColor = b.color;
+        ctx.fillStyle = grad; ctx.shadowBlur = 40; ctx.shadowColor = b.color;
         const width = b.width * a;
-        ctxEnt.fillRect(b.x - width/2, 0, width, b.y);
-        ctxEnt.fillStyle = 'rgba(255,255,255,' + (a * 0.8) + ')';
-        ctxEnt.fillRect(b.x - width/6, 0, width/3, b.y);
-        ctxEnt.shadowBlur = 0;
+        ctx.fillRect(b.x - width/2, 0, width, b.y);
+        ctx.fillStyle = 'rgba(255,255,255,' + (a * 0.8) + ')';
+        ctx.fillRect(b.x - width/6, 0, width/3, b.y);
+        ctx.shadowBlur = 0;
     }
-    ctxEnt.globalAlpha = 1;
+    ctx.globalAlpha = 1;
 
     const blink = player.invuln > 0 && Math.floor(player.invuln / 4) % 2 === 0;
-    if (!blink && sprites.player) ctxEnt.drawImage(sprites.player, player.x - 55, player.y - 55, 110, 110);
+    if (!blink && sprites.player) ctx.drawImage(sprites.player, player.x - 55, player.y - 55, 110, 110);
 
     const hpBarW = 70, hpBarH = 6, hpBarY = player.y - 70;
     const hpPct = Math.max(0, STATE.hp / STATE.maxHp);
-    ctxEnt.fillStyle = 'rgba(0,0,0,0.7)';
-    ctxEnt.fillRect(player.x - hpBarW/2 - 1, hpBarY - 1, hpBarW + 2, hpBarH + 2);
-    ctxEnt.fillStyle = hpPct > 0.5 ? '#00ff88' : hpPct > 0.25 ? '#ffaa00' : '#ff0055';
-    ctxEnt.shadowBlur = 10; ctxEnt.shadowColor = ctxEnt.fillStyle;
-    ctxEnt.fillRect(player.x - hpBarW/2, hpBarY, hpBarW * hpPct, hpBarH);
-    ctxEnt.shadowBlur = 0;
-    ctxEnt.strokeStyle = 'rgba(255,255,255,0.4)'; ctxEnt.lineWidth = 1;
-    ctxEnt.strokeRect(player.x - hpBarW/2, hpBarY, hpBarW, hpBarH);
+    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+    ctx.fillRect(player.x - hpBarW/2 - 1, hpBarY - 1, hpBarW + 2, hpBarH + 2);
+    ctx.fillStyle = hpPct > 0.5 ? '#00ff88' : hpPct > 0.25 ? '#ffaa00' : '#ff0055';
+    ctx.shadowBlur = 10; ctx.shadowColor = ctx.fillStyle;
+    ctx.fillRect(player.x - hpBarW/2, hpBarY, hpBarW * hpPct, hpBarH);
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 1;
+    ctx.strokeRect(player.x - hpBarW/2, hpBarY, hpBarW, hpBarH);
 
     for (const b of bullets) {
         for (let i = b.trail.length - 1; i >= 0; i--) {
             const t = b.trail[i]; const a = (1 - i / b.trail.length) * 0.4;
-            ctxEnt.globalAlpha = a; ctxEnt.fillStyle = b.color;
-            ctxEnt.beginPath(); ctxEnt.arc(t.x, t.y, b.r * (1 - i*0.15), 0, 7); ctxEnt.fill();
+            ctx.globalAlpha = a; ctx.fillStyle = b.color;
+            ctx.beginPath(); ctx.arc(t.x, t.y, b.r * (1 - i*0.15), 0, 7); ctx.fill();
         }
-        ctxEnt.globalAlpha = 1;
-        ctxEnt.shadowBlur = 18; ctxEnt.shadowColor = b.color;
-        const g = ctxEnt.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r*2);
+        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 18; ctx.shadowColor = b.color;
+        const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r*2);
         g.addColorStop(0, '#fff'); g.addColorStop(0.5, b.color); g.addColorStop(1, 'rgba(255,255,255,0)');
-        ctxEnt.fillStyle = g;
-        ctxEnt.beginPath(); ctxEnt.arc(b.x, b.y, b.r * 1.5, 0, 7); ctxEnt.fill();
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(b.x, b.y, b.r * 1.5, 0, 7); ctx.fill();
     }
-    ctxEnt.shadowBlur = 0;
+    ctx.shadowBlur = 0;
 
     for (const m of missiles) {
         for (let i = m.trail.length - 1; i >= 0; i--) {
             const t = m.trail[i]; const a = (1 - i / m.trail.length) * 0.7;
-            ctxEnt.globalAlpha = a; ctxEnt.fillStyle = '#ff8800';
-            ctxEnt.shadowBlur = 15; ctxEnt.shadowColor = '#ff8800';
-            ctxEnt.beginPath(); ctxEnt.arc(t.x, t.y, 6 * (1 - i*0.1), 0, 7); ctxEnt.fill();
+            ctx.globalAlpha = a; ctx.fillStyle = '#ff8800';
+            ctx.shadowBlur = 15; ctx.shadowColor = '#ff8800';
+            ctx.beginPath(); ctx.arc(t.x, t.y, 6 * (1 - i*0.1), 0, 7); ctx.fill();
         }
-        ctxEnt.globalAlpha = 1; ctxEnt.shadowBlur = 25; ctxEnt.shadowColor = '#ff8800';
-        const g = ctxEnt.createRadialGradient(m.x, m.y, 0, m.x, m.y, 12);
+        ctx.globalAlpha = 1; ctx.shadowBlur = 25; ctx.shadowColor = '#ff8800';
+        const g = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, 12);
         g.addColorStop(0, '#fff'); g.addColorStop(0.4, '#ffcc00'); g.addColorStop(1, '#ff4400');
-        ctxEnt.fillStyle = g; ctxEnt.beginPath(); ctxEnt.arc(m.x, m.y, 8, 0, 7); ctxEnt.fill();
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(m.x, m.y, 8, 0, 7); ctx.fill();
     }
-    ctxEnt.shadowBlur = 0;
+    ctx.shadowBlur = 0;
 
     for (const eb of enemyBullets) {
-        ctxEnt.shadowBlur = 15; ctxEnt.shadowColor = eb.color;
-        const g = ctxEnt.createRadialGradient(eb.x, eb.y, 0, eb.x, eb.y, eb.r*2);
+        ctx.shadowBlur = 15; ctx.shadowColor = eb.color;
+        const g = ctx.createRadialGradient(eb.x, eb.y, 0, eb.x, eb.y, eb.r*2);
         g.addColorStop(0, '#fff'); g.addColorStop(0.4, eb.color); g.addColorStop(1, 'rgba(255,0,255,0)');
-        ctxEnt.fillStyle = g; ctxEnt.beginPath(); ctxEnt.arc(eb.x, eb.y, eb.r, 0, 7); ctxEnt.fill();
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(eb.x, eb.y, eb.r, 0, 7); ctx.fill();
     }
-    ctxEnt.shadowBlur = 0;
+    ctx.shadowBlur = 0;
 
     for (const e of enemies) {
         const sprite = sprites[e.sprite];
         const size = e.sprite === 'tank' ? 90 : e.sprite === 'monster' ? 70 : e.sprite === 'shooter' ? 60 : 50;
         if (sprite) {
             if (freezeTimer > 0) {
-                ctxEnt.globalAlpha = 0.6;
-                ctxEnt.drawImage(sprite, e.x - size/2, e.y - size/2, size, size);
-                ctxEnt.globalAlpha = 0.5; ctxEnt.fillStyle = '#88ddff';
-                ctxEnt.beginPath(); ctxEnt.arc(e.x, e.y, size/2, 0, 7); ctxEnt.fill();
-                ctxEnt.globalAlpha = 1;
+                ctx.globalAlpha = 0.6;
+                ctx.drawImage(sprite, e.x - size/2, e.y - size/2, size, size);
+                ctx.globalAlpha = 0.5; ctx.fillStyle = '#88ddff';
+                ctx.beginPath(); ctx.arc(e.x, e.y, size/2, 0, 7); ctx.fill();
+                ctx.globalAlpha = 1;
             } else if (acidTimer > 0) {
-                ctxEnt.globalAlpha = 0.8;
-                ctxEnt.drawImage(sprite, e.x - size/2, e.y - size/2, size, size);
-                ctxEnt.globalAlpha = 0.4; ctxEnt.fillStyle = '#00ff00';
-                ctxEnt.beginPath(); ctxEnt.arc(e.x, e.y, size/2, 0, 7); ctxEnt.fill();
-                ctxEnt.globalAlpha = 1;
+                ctx.globalAlpha = 0.8;
+                ctx.drawImage(sprite, e.x - size/2, e.y - size/2, size, size);
+                ctx.globalAlpha = 0.4; ctx.fillStyle = '#00ff00';
+                ctx.beginPath(); ctx.arc(e.x, e.y, size/2, 0, 7); ctx.fill();
+                ctx.globalAlpha = 1;
             } else {
-                ctxEnt.drawImage(sprite, e.x - size/2, e.y - size/2, size, size);
+                ctx.drawImage(sprite, e.x - size/2, e.y - size/2, size, size);
             }
         }
         if (e.hitFlash > 0) {
-            ctxEnt.globalAlpha = e.hitFlash / 3 * 0.6; ctxEnt.fillStyle = '#fff';
-            ctxEnt.beginPath(); ctxEnt.arc(e.x, e.y, e.w/2, 0, 7); ctxEnt.fill(); ctxEnt.globalAlpha = 1;
+            ctx.globalAlpha = e.hitFlash / 3 * 0.6; ctx.fillStyle = '#fff';
+            ctx.beginPath(); ctx.arc(e.x, e.y, e.w/2, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
         }
         const pct = e.hp / e.maxHp;
-        ctxEnt.fillStyle = 'rgba(0,0,0,0.6)'; ctxEnt.fillRect(e.x - e.w/2, e.y - e.h/2 - 10, e.w, 4);
-        ctxEnt.fillStyle = pct > 0.5 ? '#0f0' : pct > 0.25 ? '#ffaa00' : '#f00';
-        ctxEnt.fillRect(e.x - e.w/2, e.y - e.h/2 - 10, e.w * pct, 4);
+        ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(e.x - e.w/2, e.y - e.h/2 - 10, e.w, 4);
+        ctx.fillStyle = pct > 0.5 ? '#0f0' : pct > 0.25 ? '#ffaa00' : '#f00';
+        ctx.fillRect(e.x - e.w/2, e.y - e.h/2 - 10, e.w * pct, 4);
     }
 
     if (boss && sprites.boss) {
-        ctxEnt.drawImage(sprites.boss, boss.x - 90, boss.y - 90, 180, 180);
+        ctx.drawImage(sprites.boss, boss.x - 90, boss.y - 90, 180, 180);
         if (boss.hitFlash > 0) {
-            ctxEnt.globalAlpha = boss.hitFlash / 4 * 0.5; ctxEnt.fillStyle = '#fff';
-            ctxEnt.beginPath(); ctxEnt.arc(boss.x, boss.y, boss.w/2, 0, 7); ctxEnt.fill(); ctxEnt.globalAlpha = 1;
+            ctx.globalAlpha = boss.hitFlash / 4 * 0.5; ctx.fillStyle = '#fff';
+            ctx.beginPath(); ctx.arc(boss.x, boss.y, boss.w/2, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
         }
     }
 
     for (const dn of damageNumbers) {
         const a = dn.life / 60;
-        ctxEnt.globalAlpha = a; ctxEnt.font = 'bold 20px Orbitron, sans-serif'; ctxEnt.textAlign = 'center';
-        ctxEnt.fillStyle = dn.color; ctxEnt.shadowBlur = 15; ctxEnt.shadowColor = dn.color;
-        ctxEnt.fillText((dn.isCoin ? '' : '-') + dn.value, dn.x, dn.y);
-        ctxEnt.shadowBlur = 0;
+        ctx.globalAlpha = a; ctx.font = 'bold 20px Orbitron, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillStyle = dn.color; ctx.shadowBlur = 15; ctx.shadowColor = dn.color;
+        ctx.fillText((dn.isCoin ? '' : '-') + dn.value, dn.x, dn.y);
+        ctx.shadowBlur = 0;
     }
-    ctxEnt.globalAlpha = 1;
+    ctx.globalAlpha = 1;
 
     if (waveBanner.timer > 0) {
-        ctxEnt.globalAlpha = waveBanner.alpha;
-        ctxEnt.font = 'bold min(42px, 10vw) Orbitron, sans-serif'; ctxEnt.textAlign = 'center';
-        ctxEnt.shadowBlur = 25; ctxEnt.shadowColor = '#0ff'; ctxEnt.fillStyle = '#fff';
-        ctxEnt.fillText(waveBanner.text, W/2, H/2 - 60);
-        ctxEnt.shadowBlur = 0; ctxEnt.globalAlpha = 1;
+        ctx.globalAlpha = waveBanner.alpha;
+        ctx.font = 'bold min(42px, 10vw) Orbitron, sans-serif'; ctx.textAlign = 'center';
+        ctx.shadowBlur = 25; ctx.shadowColor = '#0ff'; ctx.fillStyle = '#fff';
+        ctx.fillText(waveBanner.text, W/2, H/2 - 60);
+        ctx.shadowBlur = 0; ctx.globalAlpha = 1;
     }
-    ctxEnt.restore();
-
-    // Draw Entities to Main
-    ctx.drawImage(layerEntities, 0, 0, W, H);
+    ctx.restore();
 
     if (screenFlash > 0.01) {
         ctx.fillStyle = screenFlashColor; ctx.globalAlpha = screenFlash * 0.5;
@@ -1850,7 +1938,7 @@ function draw() {
 }
 
 // ============================================================
-// === LOOP ===
+// === LOOP (FPS UPDATED) ===
 // ============================================================
 function loop(timestamp) {
     if (!STATE.isPlaying) return;
@@ -1866,6 +1954,7 @@ function loop(timestamp) {
     frameCount++;
     fpsUpdateTimer += delta;
     
+    // Update FPS every 200ms for smoother reading but still accurate
     if (fpsUpdateTimer >= 200) {
         const fps = Math.round(frameCount * 1000 / fpsUpdateTimer);
         fpsEl.textContent = `FPS: ${fps}`;
@@ -1941,7 +2030,7 @@ function openShop() {
     if (STATE.isPlaying) pauseGameForModal();
     saveGame(true);
     const c = $('shop-items'); c.innerHTML = '';
-    const allWeaponsUnlocked = Object.keys(WEAPONS).filter(k => !WEAPONS[k].adminOnly).every(id => STATE.unlockedWeapons.includes(id));
+    const allWeaponsUnlocked = Object.keys(WEAPONS).every(id => STATE.unlockedWeapons.includes(id));
     const allAbilitiesUnlocked = Object.keys(ABILITIES).every(id => STATE.unlockedAbilities.includes(id));
     const d1 = document.createElement('div'); d1.className = 'shop-item'; d1.style.borderColor = '#ffd700';
     d1.innerHTML = `<div class="item-info"><h4 style="color:#ffd700"><i class="fa-solid fa-box" style="color:#ffd700;"></i> WEAPON CASE</h4><p>${allWeaponsUnlocked ? 'Всё оружие открыто' : 'Случайное оружие'}</p></div>
@@ -1968,7 +2057,7 @@ function buyUpgrade(k) {
 function openCase(isFree) {
     if (STATE.isPlaying) pauseGameForModal();
     const img = $('case-img'), nm = $('case-name'), ds = $('case-desc');
-    const remaining = Object.keys(WEAPONS).filter(id => !STATE.unlockedWeapons.includes(id) && !WEAPONS[id].adminOnly);
+    const remaining = Object.keys(WEAPONS).filter(id => !STATE.unlockedWeapons.includes(id));
     if (remaining.length === 0) {
         const ref = 250; STATE.coins += ref;
         nm.innerText = "ВСЁ ОТКРЫТО"; nm.className = "case-name rarity-common";
@@ -2017,7 +2106,7 @@ function closeModal(id) {
     }
     if (STATE.isPlaying) {
         setTimeout(() => {
-            const anyOpen = ['upgrades-modal','shop-modal','case-modal','ability-case-modal','index-modal','quests-modal','profile-modal','pause-screen','game-over-screen','settings-modal','admin-modal']
+            const anyOpen = ['upgrades-modal','shop-modal','case-modal','ability-case-modal','index-modal','quests-modal','profile-modal','pause-screen','game-over-screen']
                 .some(mid => $(mid) && $(mid).classList.contains('show'));
             if (!anyOpen) resumeGameFromModal();
         }, 50);
@@ -2026,18 +2115,16 @@ function closeModal(id) {
 }
 
 // ============================================================
-// === INDEX (UPDATED WITH ENEMIES & DETAILS) ===
+// === INDEX (UPDATED: Ability selection moved here) ===
 // ============================================================
 let currentIndexTab = 'weapons';
 let selectedBuilderSlot = 0;
-let currentDetailView = null; // 'enemy_drone', etc.
 
 function openIndex() {
     if (STATE.isPlaying) pauseGameForModal();
     saveGame(true);
     $('index-tabs').style.display = 'flex';
     $('index-header').textContent = 'ИНДЕКС';
-    currentDetailView = null;
     switchIndexTab(currentIndexTab);
     show('index-modal');
 }
@@ -2052,47 +2139,23 @@ function switchIndexTab(tab) {
 function renderIndex() {
     const body = $('index-body');
     body.innerHTML = '';
-    
-    // If viewing details
-    if (currentDetailView) {
-        renderDetailView(body);
-        return;
-    }
-
     if (currentIndexTab === 'weapons') {
         const wrap = document.createElement('div'); wrap.className = 'index-list';
         for (const id in WEAPONS) {
             const w = WEAPONS[id];
-            if (w.adminOnly && !IS_ADMIN) continue;
             const unlocked = STATE.unlockedWeapons.includes(id);
             const inSlot = STATE.weaponSlots.includes(id);
             const card = document.createElement('div');
             card.className = 'index-card ' + (unlocked ? 'unlocked' : 'locked');
             card.innerHTML = `
                 <div class="index-card-icon" style="color:${w.color}"><i class="fa-solid ${w.icon}"></i></div>
-                <div class="index-card-info"><h5 style="color:${w.color}">${w.name}</h5><p>${w.desc}</p></div>
+                <div class="index-card-info"><h5 style="color:${w.color}">${w.name}</h5><p>${w.desc} · Урон: ${w.dmg} · Скорость: ${w.rate}</p></div>
                 <div class="index-card-status ${unlocked ? '' : 'locked'}">${inSlot ? '✓' : unlocked ? '✓' : '🔒'}</div>`;
             wrap.appendChild(card);
         }
         body.appendChild(wrap);
-    } else if (currentIndexTab === 'enemies') {
-        const wrap = document.createElement('div'); wrap.className = 'index-list';
-        for (const id in ENEMY_TYPES) {
-            const e = ENEMY_TYPES[id];
-            const card = document.createElement('div');
-            card.className = 'index-card unlocked';
-            card.innerHTML = `
-                <div class="index-card-icon" style="color:${e.color}"><i class="fa-solid fa-ghost"></i></div>
-                <div class="index-card-info"><h5 style="color:${e.color}">${e.name}</h5><p>Нажми для подробностей</p></div>
-                <div class="index-card-status">👁</div>`;
-            card.onclick = () => {
-                currentDetailView = id;
-                renderIndex();
-            };
-            wrap.appendChild(card);
-        }
-        body.appendChild(wrap);
     } else if (currentIndexTab === 'abilities') {
+        // NEW: Show slots to change abilities
         const slotsDiv = document.createElement('div');
         slotsDiv.style.cssText = 'display:flex; gap:10px; margin-bottom:15px; justify-content:center;';
         
@@ -2124,7 +2187,7 @@ function renderIndex() {
             card.className = 'index-card ' + (unlocked ? 'unlocked' : 'locked');
             card.innerHTML = `
                 <div class="index-card-icon" style="color:${a.color}"><i class="fa-solid ${a.icon}"></i></div>
-                <div class="index-card-info"><h5 style="color:${a.color}">${a.name}${a.isDefault ? ' <span style="font-size:9px;color:#0f0">[FREE]</span>' : ''}</h5><p>${a.desc}</p></div>
+                <div class="index-card-info"><h5 style="color:${a.color}">${a.name}${a.isDefault ? ' <span style="font-size:9px;color:#0f0">[FREE]</span>' : ''}</h5><p>${a.desc} · КД: ${(a.cooldown/60).toFixed(1)}с</p></div>
                 <div class="index-card-status ${unlocked ? '' : 'locked'}">${unlocked ? '✓' : '🔒'}</div>`;
             wrap.appendChild(card);
         }
@@ -2144,61 +2207,6 @@ function renderIndex() {
             renderBuilderSlots();
         });
     }
-}
-
-function renderDetailView(body) {
-    const e = ENEMY_TYPES[currentDetailView];
-    const backBtn = document.createElement('button');
-    backBtn.className = 'menu-btn';
-    backBtn.style.marginBottom = '15px';
-    backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> НАЗАД';
-    backBtn.onclick = () => { currentDetailView = null; renderIndex(); };
-    body.appendChild(backBtn);
-
-    const container = document.createElement('div');
-    container.className = 'enemy-detail-view';
-    
-    // Sprite Preview
-    const spriteBox = document.createElement('div');
-    spriteBox.className = 'enemy-sprite-preview';
-    if (sprites[currentDetailView]) {
-        const img = sprites[currentDetailView];
-        // Clone image for preview
-        const previewImg = new Image();
-        previewImg.src = img.src;
-        spriteBox.appendChild(previewImg);
-    }
-    container.appendChild(spriteBox);
-
-    const title = document.createElement('h2');
-    title.style.color = e.color;
-    title.style.marginBottom = '10px';
-    title.textContent = e.name;
-    container.appendChild(title);
-
-    const lore = document.createElement('div');
-    lore.className = 'enemy-lore';
-    lore.textContent = e.lore;
-    container.appendChild(lore);
-
-    const statsGrid = document.createElement('div');
-    statsGrid.className = 'enemy-stats-grid';
-    
-    const addStat = (label, val) => {
-        const row = document.createElement('div');
-        row.className = 'enemy-stat-row';
-        row.innerHTML = `<span>${label}</span><span class="enemy-stat-val">${val}</span>`;
-        statsGrid.appendChild(row);
-    };
-
-    addStat('Здоровье', e.stats.hp);
-    addStat('Урон', e.stats.dmg);
-    addStat('Скорость', e.stats.speed);
-    addStat('Способность', e.stats.ability);
-    addStat('Награда', `${e.coin} 💰`);
-
-    container.appendChild(statsGrid);
-    body.appendChild(container);
 }
 
 function drawShipBuilder() {
@@ -2247,7 +2255,7 @@ function drawShipBuilder() {
             bx.shadowBlur = 10; bx.shadowColor = w.color;
             bx.font = 'bold 14px "Font Awesome 6 Free"';
             bx.textAlign = 'center'; bx.textBaseline = 'middle';
-            const iconCode = { 'fa-gun':'\uf6e4', 'fa-bolt':'\uf0e7', 'fa-atom':'\uf5d2', 'fa-fire':'\uf06d', 'fa-bolt-lightning':'\ue0b7', 'fa-rocket':'\uf135', 'fa-fan':'\uf863', 'fa-crosshairs':'\uf05b', 'fa-satellite-dish':'\uf7c0' }[w.icon] || '?';
+            const iconCode = { 'fa-gun':'\uf6e4', 'fa-bolt':'\uf0e7', 'fa-atom':'\uf5d2', 'fa-fire':'\uf06d', 'fa-bolt-lightning':'\ue0b7', 'fa-rocket':'\uf135', 'fa-fan':'\uf863', 'fa-crosshairs':'\uf05b' }[w.icon] || '?';
             bx.fillText(iconCode, 0, 0);
             bx.shadowBlur = 0;
         } else if (!unlockedSlot) {
@@ -2331,7 +2339,6 @@ function renderWeaponPicker() {
     wrap.appendChild(empty);
     for (const id in WEAPONS) {
         const w = WEAPONS[id];
-        if (w.adminOnly && !IS_ADMIN) continue;
         const unlocked = STATE.unlockedWeapons.includes(id);
         const sel = STATE.weaponSlots[selectedBuilderSlot] === id;
         const el = document.createElement('div');
@@ -2450,36 +2457,13 @@ function openProfile() {
 }
 
 // ============================================================
-// === SETTINGS & ADMIN ===
-// ============================================================
-function openSettings() {
-    $('toggle-sound').textContent = STATE.settings.sound ? 'ВКЛ' : 'ВЫКЛ';
-    $('toggle-sound').style.borderColor = STATE.settings.sound ? '#0ff' : '#555';
-    $('toggle-sound').style.color = STATE.settings.sound ? '#0ff' : '#555';
-    
-    $('toggle-haptic').textContent = STATE.settings.haptic ? 'ВКЛ' : 'ВЫКЛ';
-    $('toggle-haptic').style.borderColor = STATE.settings.haptic ? '#0ff' : '#555';
-    $('toggle-haptic').style.color = STATE.settings.haptic ? '#0ff' : '#555';
-    
-    show('settings-modal');
-}
-
-function openAdmin() {
-    show('admin-modal');
-}
-
-// ============================================================
-// === VISIBILITY (FREEZE) ===
+// === VISIBILITY ===
 // ============================================================
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-        if (STATE.isPlaying) {
-            STATE.isPaused = true;
-            show('pause-screen'); // Show pause menu immediately
-        }
+        if (STATE.isPlaying) STATE.isPaused = true;
         saveGame(true);
     } else {
-        // Don't auto-resume, let user click resume
         lastFrameTime = performance.now();
     }
 });
@@ -2489,18 +2473,8 @@ document.addEventListener('visibilitychange', () => {
 // ============================================================
 window.addEventListener('load', () => {
     $('btn-play').addEventListener('click', () => { haptic('medium'); startGame(); });
+    // Removed btn-quests from menu
     $('btn-profile').addEventListener('click', () => { haptic('light'); openProfile(); });
-    $('btn-settings').addEventListener('click', () => { haptic('light'); openSettings(); });
-
-    // Admin Button Injection
-    if (IS_ADMIN) {
-        const adminContainer = $('admin-btn-container');
-        const adminBtn = document.createElement('button');
-        adminBtn.className = 'menu-btn admin';
-        adminBtn.innerHTML = '<i class="fa-solid fa-crown"></i> ADMIN PANEL';
-        adminBtn.onclick = () => { haptic('heavy'); openAdmin(); };
-        adminContainer.appendChild(adminBtn);
-    }
 
     if (!HAS_TG_API) {
         const btn = $('btn-profile');
@@ -2513,12 +2487,14 @@ window.addEventListener('load', () => {
         }
     }
 
+    // Game Quests Button
     $('btn-quests-game').addEventListener('click', () => { haptic('light'); openQuests(); });
     $('btn-upgrades').addEventListener('click', () => { haptic('light'); openUpgrades(); });
     $('btn-shop').addEventListener('click', () => { haptic('light'); openShop(); });
     $('btn-index').addEventListener('click', () => { haptic('light'); openIndex(); });
     $('btn-pause').addEventListener('click', togglePause);
 
+    // Abilities only shoot now
     $('ability-slot-0').addEventListener('click', () => onAbilityClick(0));
     $('ability-slot-1').addEventListener('click', () => onAbilityClick(1));
     $('auto-btn').addEventListener('click', () => { haptic('light'); toggleAuto(); });
@@ -2530,47 +2506,8 @@ window.addEventListener('load', () => {
     $('close-index').addEventListener('click', () => closeModal('index-modal'));
     $('close-profile').addEventListener('click', () => closeModal('profile-modal'));
     $('close-quests').addEventListener('click', () => closeModal('quests-modal'));
-    $('close-settings').addEventListener('click', () => closeModal('settings-modal'));
-    $('close-admin').addEventListener('click', () => closeModal('admin-modal'));
-
-    // Settings Logic
-    $('toggle-sound').addEventListener('click', () => {
-        STATE.settings.sound = !STATE.settings.sound;
-        saveGame(); openSettings();
-    });
-    $('toggle-haptic').addEventListener('click', () => {
-        STATE.settings.haptic = !STATE.settings.haptic;
-        saveGame(); openSettings();
-    });
-    $('reset-save').addEventListener('click', () => {
-        if(confirm('Ты уверен? Весь прогресс будет удалён!')) {
-            localStorage.removeItem(SAVE_KEY);
-            location.reload();
-        }
-    });
-
-    // Admin Logic
-    $('admin-add-coins').addEventListener('click', () => {
-        STATE.coins += 10000; saveGame(); updateUI(); haptic('success');
-    });
-    $('admin-unlock-all').addEventListener('click', () => {
-        Object.keys(WEAPONS).forEach(k => { if(!STATE.unlockedWeapons.includes(k)) STATE.unlockedWeapons.push(k); });
-        Object.keys(ABILITIES).forEach(k => { if(!STATE.unlockedAbilities.includes(k)) STATE.unlockedAbilities.push(k); });
-        STATE.slotUnlocked = [true, true, true, true, true];
-        saveGame(); haptic('success'); alert('Всё открыто!');
-    });
-    $('admin-max-stats').addEventListener('click', () => {
-        Object.keys(UPGRADES).forEach(k => STATE.upgrades[k] = UPGRADES[k].max);
-        STATE.maxHp = 100 + STATE.upgrades.hp * 25; STATE.hp = STATE.maxHp;
-        saveGame(); updateUI(); haptic('success');
-    });
-    $('admin-kill-boss').addEventListener('click', () => {
-        if (boss) { boss.hp = 0; defeatBoss(); haptic('success'); }
-        else alert('Босса нет на экране!');
-    });
 
     $('tab-weapons').addEventListener('click', () => switchIndexTab('weapons'));
-    $('tab-enemies').addEventListener('click', () => switchIndexTab('enemies'));
     $('tab-abilities').addEventListener('click', () => switchIndexTab('abilities'));
     $('tab-builder').addEventListener('click', () => switchIndexTab('builder'));
 

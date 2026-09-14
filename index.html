@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <!-- ИКОНКА САЙТА -->
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/MrFeastProject/Battle/main/CosmicBattle.png">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>MrFeastProject · Cosmic Battle</title>
@@ -655,11 +657,12 @@ async function loadSpriteFromDB(key) {
 }
 
 // ============================================================
-// === TELEGRAM & USER CHECK ===
+// === TELEGRAM & USER CHECK (ID CHECK) ===
 // ============================================================
 const tg = (window.Telegram && window.Telegram.WebApp) || null;
 const TG_USER = tg && tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
 const HAS_TG_API = !!(tg && TG_USER);
+// Проверка по ID 5677768048
 const IS_ADMIN = HAS_TG_API && TG_USER.id === 5677768048;
 
 if (tg) {
@@ -704,13 +707,9 @@ function showToast(msg) {
 function triggerScreenFx(type) {
     if (!SETTINGS.particles) return;
     const overlay = $('screen-fx-overlay');
-    // Remove old classes
     overlay.className = '';
-    // Force reflow
     void overlay.offsetWidth;
-    // Add new class
     overlay.classList.add('fx-' + type);
-    // Clean up after animation
     setTimeout(() => { overlay.className = ''; }, 1000);
 }
 
@@ -899,7 +898,6 @@ const WEAPONS = {
     godLaser:{ id:'godLaser',name:"ЛАЗЕРНАЯ МОЩЬ", color:"#ff00ff", dmg:100, rate:1, count:1, spread:0, icon:"fa-infinity", rarity:'legend', desc:"Непрерывный луч смерти (Admin Only)", isAdminOnly:true, isBeam:true }
 };
 
-// ABILITIES: 100% HP on mobs, % on bosses
 const ABILITIES = {
     rocketStrike: { id:'rocketStrike', name:"РАКЕТНЫЙ УДАР", icon:"fa-rocket",    color:"#ff8800", desc:"100% HP врагам. Боссам: 20% HP", cooldown:120, rarity:'common', isDefault:true, mobDmgPct:1.0, bossDmgPct:0.2 },
     laserBeam:    { id:'laserBeam',    name:"ЛАЗЕРНЫЙ ЛУЧ",  icon:"fa-bolt",      color:"#00ffff", desc:"Луч вперёд, 15 урона всем на линии", cooldown:300, rarity:'rare', dmg:15 },
@@ -1220,6 +1218,7 @@ let acidTimer = 0;
 let W = 0, H = 0;
 const TARGET_FPS = 60, FRAME_TIME = 1000 / TARGET_FPS;
 let lastFrameTime = 0, frameCount = 0, fpsUpdateTimer = 0;
+let currentFpsValue = 60; // Для FTAI
 const fpsEl = $('fps-counter');
 
 const canvas = $('gameCanvas');
@@ -1257,7 +1256,7 @@ document.addEventListener('keydown', e => {
 });
 
 // ============================================================
-// === ABILITY LOGIC (FIXED: Settings open correctly, % dmg logic) ===
+// === ABILITY LOGIC ===
 // ============================================================
 function onAbilityClick(slot) { useAbility(slot); }
 
@@ -1319,7 +1318,6 @@ function useAbility(slot) {
     if (btn) { btn.classList.add('firing'); setTimeout(() => btn.classList.remove('firing'), 400); }
     haptic('medium');
     
-    // Trigger screen FX
     const fxMap = { rocketStrike:'rocket', laserBeam:'laser', nova:'nova', freeze:'freeze', acid:'acid' };
     if (fxMap[abilityId]) triggerScreenFx(fxMap[abilityId]);
     
@@ -1348,9 +1346,7 @@ function castLaserBeam() {
 function castNova() {
     shockwaves.push({ x: player.x, y: player.y, radius: 10, maxRadius: 500, life: 40, maxLife: 40, color: '#ffaa00', type: 'nova' });
     shockwaves.push({ x: player.x, y: player.y, radius: 5, maxRadius: 350, life: 35, maxLife: 35, color: '#fff', type: 'nova-inner' });
-    // 100% HP to mobs
     for (let i = enemies.length - 1; i >= 0; i--) damageEnemy(enemies[i], enemies[i].maxHp, i);
-    // 50% HP to boss
     if (boss) { 
         const dmg = Math.floor(boss.maxHp * ABILITIES.nova.bossDmgPct);
         boss.hp -= dmg; boss.hitFlash = 6; updateBossBar(); 
@@ -1618,7 +1614,6 @@ function update(dt) {
         if (targetAlive) {
             const dx = m.target.x - m.x, dy = m.target.y - m.y, dist = Math.hypot(dx, dy);
             if (dist < 30) {
-                // Rocket: 100% HP to mobs, 20% HP to boss
                 let dmg;
                 if (m.target === boss) { 
                     dmg = Math.floor(boss.maxHp * ABILITIES.rocketStrike.bossDmgPct);
@@ -1828,7 +1823,7 @@ function draw() {
 }
 
 // ============================================================
-// === LOOP ===
+// === LOOP (WITH FTAI FPS UPDATE) ===
 // ============================================================
 function loop(timestamp) {
     if (!STATE.isPlaying) return;
@@ -1838,7 +1833,13 @@ function loop(timestamp) {
     if (delta < FRAME_TIME - 1) return;
     lastFrameTime = timestamp - (delta % FRAME_TIME);
     frameCount++; fpsUpdateTimer += delta;
-    if (fpsUpdateTimer >= 200) { const fps = Math.round(frameCount * 1000 / fpsUpdateTimer); fpsEl.textContent = `FPS: ${fps}`; frameCount = 0; fpsUpdateTimer = 0; }
+    if (fpsUpdateTimer >= 200) { 
+        const fps = Math.round(frameCount * 1000 / fpsUpdateTimer); 
+        fpsEl.textContent = `FPS: ${fps}`; 
+        currentFpsValue = fps; // Обновляем для FTAI
+        frameCount = 0; 
+        fpsUpdateTimer = 0; 
+    }
     update(delta); draw();
 }
 
@@ -1865,7 +1866,7 @@ function updateAbilityUI() {
 function toggleAuto() { STATE.autoUse = !STATE.autoUse; $('auto-btn').classList.toggle('active', STATE.autoUse); saveGame(true); }
 
 // ============================================================
-// === MODALS (FIXED: Settings opens correctly from pause) ===
+// === MODALS ===
 // ============================================================
 function openUpgrades() {
     if (STATE.isPlaying) pauseGameForModal(); saveGame(true);
@@ -2326,6 +2327,30 @@ window.addEventListener('load', () => {
 
     updateUI(); updateAbilityUI();
     $('auto-btn').classList.toggle('active', STATE.autoUse);
+});
+
+// ============================================================
+// === FTAI PROTOCOL (ACCELERATOR SUPPORT) ===
+// ============================================================
+let handshakeDone = false;
+
+function getCurrentFps() {
+    return currentFpsValue || 60;
+}
+
+window.addEventListener('message', (e) => {
+    if (!handshakeDone && e.data && e.data.ftai === 'handshake') {
+        handshakeDone = true;
+        try {
+            window.parent.postMessage({ ftai: 'hello', fps: getCurrentFps() }, '*');
+        } catch(err) { console.warn('FTAI Hello failed', err); }
+
+        setInterval(() => {
+            try {
+                window.parent.postMessage({ ftai: 'fps', fps: getCurrentFps() }, '*');
+            } catch(err) {}
+        }, 500);
+    }
 });
 </script>
 </body>
